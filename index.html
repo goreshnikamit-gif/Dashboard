@@ -329,7 +329,7 @@ async function handleCredentialResponse(response) {
         });
         const result = await checkReq.text();
 
-        if (result.includes("authorized")) {
+if (result.trim() === "authorized") {
             localStorage.setItem('auth_ok', 'true');
             localStorage.setItem('auth_time', new Date().getTime());
             localStorage.setItem('user_email', userEmail);

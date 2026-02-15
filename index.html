@@ -334,7 +334,7 @@ async function handleCredentialResponse(response) {
 
     try {
         // הניסיון לגשת לסקריפט. אם המשתמש לא מורשה בשיטס, הבקשה תיכשל
-        const authCheck = await fetch(SCRIPT_URL);
+        const authCheck = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail));
         const result = await authCheck.text();
         
         if (result === "authorized") {

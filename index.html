@@ -9,7 +9,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
 
-/* משתני צבעים */
 :root {
     --bg-body: #0f172a;
     --bg-card: #1e293b;
@@ -42,20 +41,17 @@
 body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system-ui,sans-serif;direction:rtl;min-height:100vh;overflow-x:hidden;padding-bottom:90px;transition:background 0.3s, color 0.3s}
 ::-webkit-scrollbar{display:none}
 
-/* מסך התחברות גוגל החדש */
 #googleLoginScreen {position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 .l-box {background:var(--bg-card);padding:40px 30px;border-radius:24px;width:100%;max-width:340px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border-color)}
 .l-ttl {font-size:28px;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg, #14b8a6, #3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .l-sub {font-size:14px;color:var(--text-sub);margin-bottom:32px;line-height:1.4;}
 .g-btn-wrapper {display:flex;justify-content:center;width:100%;min-height:44px;}
 
-/* דשבורד סיכום דינמי */
 .summary-dash {display: flex; justify-content: space-between; background: var(--bg-card); padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
 .summary-dash > div {flex: 1;}
 .sd-ttl {font-size: 11px; color: var(--text-sub); margin-bottom: 4px; font-weight:500;}
 .sd-val {font-size: 16px; font-weight: 800; color: var(--text-main);}
 
-/* קוביית תובנות */
 .insight-item {font-size:13px; margin-bottom:8px; padding:10px 12px; background:var(--bg-input); border-radius:8px; border-right:4px solid var(--accent); line-height:1.4; color:var(--text-main);}
 .insight-item:last-child {margin-bottom:0;}
 
@@ -161,14 +157,13 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 </head>
 <body>
 
 <div id="googleLoginScreen">
     <div class="l-box">
         <div class="l-ttl">Nes X Stilla</div>
-        <div class="l-sub">כניסה מאובטחת באמצעות טביעת אצבע או חשבון גוגל למורשים בלבד.</div>
+        <div class="l-sub">כניסה מאובטחת באמצעות חשבון גוגל למורשים בלבד.</div>
         <div class="g-btn-wrapper">
             <div id="g_id_onload"
                  data-client_id="943081015380-nhhrgi95qj8lhlt783ie62lvjfvau6cs.apps.googleusercontent.com"
@@ -177,14 +172,7 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
                  data-callback="handleCredentialResponse"
                  data-auto_prompt="false">
             </div>
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="pill"
-                 data-theme="outline"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-logo_alignment="left">
-            </div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
         </div>
     </div>
 </div>
@@ -235,13 +223,15 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 <div id="pgI" class="pg">
 <div class="cd"><div class="ttt">תתי קטגוריות הכנסה</div><div id="subC"></div></div>
 <input class="si" id="iSr" placeholder="🔍 חיפוש הכנסות..." oninput="rInc()">
-<div id="sumI" class="summary-dash"></div> <div class="fr" id="iCh"></div><div class="cn" id="iCn"></div><div id="iLs"></div>
+<div id="sumI" class="summary-dash"></div>
+<div class="fr" id="iCh"></div><div class="cn" id="iCn"></div><div id="iLs"></div>
 <button class="fab" onclick="oMod('income')">+</button>
 </div>
 
 <div id="pgE" class="pg">
 <input class="si" id="eSr" placeholder="🔍 חיפוש הוצאות..." oninput="rExp()">
-<div id="sumE" class="summary-dash"></div> <div class="fr" id="eCh"></div><div class="cn" id="eCn"></div><div id="eLs"></div>
+<div id="sumE" class="summary-dash"></div>
+<div class="fr" id="eCh"></div><div class="cn" id="eCn"></div><div id="eLs"></div>
 <button class="fab exp" onclick="oMod('expense')">+</button>
 </div>
 
@@ -252,7 +242,8 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 </div>
 <div class="tabs"><button class="tab on" id="tI" onclick="setTT('i')">הכנסות</button><button class="tab" id="tE" onclick="setTT('e')">הוצאות</button></div>
 <input class="si" id="tSr" placeholder="🔍 חיפוש..." oninput="rTbl()">
-<div id="sumT" class="summary-dash"></div> <div class="fr" id="tCh"></div><div class="cn" id="tCn"></div><div id="tLs"></div>
+<div id="sumT" class="summary-dash"></div>
+<div class="fr" id="tCh"></div><div class="cn" id="tCn"></div><div id="tLs"></div>
 </div>
 </div>
 
@@ -320,32 +311,34 @@ const CC={'מופע':'#14b8a6','מסחרי':'#f97316','תמלוגים':'#3b82f6'
 let D={ir:[],er:[]};
 let s1='',s2='',curPg='S',iCt='הכל',eCt='הכל',tT='i',tCt='הכל',eSh=50,tSh=50,curType='income';
 
-// --- התחברות גוגל (OAuth) ---
+// --- התחברות גוגל (המנגנון שעוקף חסימות דפדפן ומשתמש רק ב-POST) ---
 async function handleCredentialResponse(response) {
-    // פענוח זהות המשתמש מגוגל
     const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
     const userEmail = responsePayload.email;
 
-    // הצגת הודעת המתנה
     const loader = document.createElement('div');
-    loader.innerHTML = 'בודק הרשאות מול גוגל שיטס...';
-    loader.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);color:white;display:flex;align-items:center;justify-content:center;z-index:100000;';
+    loader.innerHTML = '<div style="text-align:center;"><div class="spinner" style="margin:0 auto 15px auto;border-top-color:#14b8a6;"></div><div style="font-weight:600;font-size:16px;">מאמת הרשאות מול גוגל שיטס...</div><div style="font-size:12px;color:#94a3b8;margin-top:5px;">'+userEmail+'</div></div>';
+    loader.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.95);color:white;display:flex;align-items:center;justify-content:center;z-index:100000;font-family:Rubik,sans-serif;';
     document.body.appendChild(loader);
 
     try {
-        // הניסיון לגשת לסקריפט. אם המשתמש לא מורשה בשיטס, הבקשה תיכשל
-        const authCheck = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail));
-        const result = await authCheck.text();
-        
-        if (result === "authorized") {
+        // שולחים בקשת POST חלקה - הדפדפן לא יחסום אותה לעולם כי זו אותה שיטה של השמירה
+        const checkReq = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: "checkAuth", email: userEmail })
+        });
+        const result = await checkReq.text();
+
+        if (result.includes("authorized")) {
             localStorage.setItem('auth_ok', 'true');
+            localStorage.setItem('auth_time', new Date().getTime());
             localStorage.setItem('user_email', userEmail);
             location.reload(); 
         } else {
             throw new Error("unauthorized");
         }
     } catch (error) {
-        alert("גישה נדחתה! רק משתמשים המשותפים כעורכים בגיליון הגוגל שיטס מורשים להיכנס.");
+        alert("גישה נדחתה! המייל " + userEmail + " אינו מורשה להיכנס. עליך להיות משותף בשיטס.");
         loader.remove();
         google.accounts.id.disableAutoSelect();
     }
@@ -356,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('themeBtn').textContent = '🌙';
     }
     
-    // בדיקת התחברות מגוגל (נשמר ל-24 שעות)
     const savedAuth = localStorage.getItem('auth_ok');
     const authTime = localStorage.getItem('auth_time');
     const now = new Date().getTime();
@@ -374,7 +366,6 @@ function showApp() {
     loadData();
 }
 
-// ניהול מצב יום/לילה
 function toggleTheme() {
     const isLight = document.body.getAttribute('data-theme') === 'light';
     if(isLight){
@@ -388,15 +379,16 @@ function toggleTheme() {
     }
 }
 
-// --- פונקציית חגיגה: קונפטי ומדבקה ---
 function triggerCelebration() {
     if(typeof confetti !== 'undefined') {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
     
     const sticker = document.createElement('img');
-    // שים לב: תחליף את הלינק הזה בלינק האמיתי לתמונה של החבר שלך!
-    sticker.src = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExanV0N2VkY2M2ZzNqb3A3bG5mZnFrZG5qc3JicDhyMXo0YWh2dDIzeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MFsqcBSoOKPbjtmvWz/giphy.gif'; 
+    // =========================================================
+    // הערה חשובה: פה למטה שים את הלינק לגיף שאהבת והורדת בעצמך!
+    // =========================================================
+    sticker.src = 'https://media.giphy.com/media/l41YmQjOz9qg2Ecow/giphy.gif'; 
     sticker.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:99999;width:200px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);';
     document.body.appendChild(sticker);
     
@@ -525,7 +517,6 @@ function init(){
 function sP(el,a,b){document.querySelectorAll('.pb').forEach(x=>x.classList.remove('on'));el.classList.add('on');document.getElementById('sd').value=a;document.getElementById('ed').value=b;apply();}
 function apply(){s1=document.getElementById('sd').value;s2=document.getElementById('ed').value;document.getElementById('pLbl').textContent=new Date(s1).toLocaleDateString('he-IL')+' - '+new Date(s2).toLocaleDateString('he-IL');iCt='הכל';eCt='הכל';tCt='הכל';eSh=50;tSh=50;renderAll();}
 
-// --- עדכון שורת הסיכום בדינמיות ---
 function updateSummaryDash(elId, arr) {
     const total = arr.reduce((sum, item) => sum + item.a, 0);
     const count = arr.length;
@@ -538,7 +529,6 @@ function updateSummaryDash(elId, arr) {
     `;
 }
 
-// --- יצירת התובנות החכמות ---
 function generateInsights(inc, exp) {
     const sumI = inc.reduce((s, r) => s + r.a, 0);
     const sumE = exp.reduce((s, r) => s + r.a, 0);
@@ -562,9 +552,8 @@ function generateInsights(inc, exp) {
 
 function renderAll(){
   const{inc,exp}=gF();
-  const ti=inc.reduce((s,r)=>s+r.a,0),te=exp.reduce((s,r)=>s+r.a,0),pr=ti-te,mg=ti>0?((pr/ti)*100).toFixed(1):0;
+  const ti=inc.reduce((s,r)=>s+r.a,0),te=exp.reduce((s,r)=>s+r.a,0),pr=ti-te;
   
-  // עדכון התובנות
   generateInsights(inc, exp);
   
   document.getElementById('kpis').innerHTML=`
@@ -660,7 +649,7 @@ function rInc(){
   const q=(document.getElementById('iSr').value||'').toLowerCase();
   const fl=inc.filter(r=>(iCt==='הכל'||r.c===iCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
   
-  updateSummaryDash('sumI', fl); // קריאה לעדכון הסיכום
+  updateSummaryDash('sumI', fl);
   
   document.getElementById('iCn').textContent=fl.length+' מתוך '+inc.length;
   document.getElementById('iLs').innerHTML=fl.map(r=>mkC(r,'i')).join('');
@@ -673,7 +662,7 @@ function rExp(){
   const q=(document.getElementById('eSr').value||'').toLowerCase();
   const fl=exp.filter(r=>(eCt==='הכל'||r.c===eCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
   
-  updateSummaryDash('sumE', fl); // קריאה לעדכון הסיכום
+  updateSummaryDash('sumE', fl);
 
   document.getElementById('eCn').textContent=fl.length+' מתוך '+exp.length;
   let h=fl.slice(0,eSh).map(r=>mkC(r,'e')).join('');
@@ -690,7 +679,7 @@ function rTbl(){
   const q=(document.getElementById('tSr').value||'').toLowerCase();
   const fl=recs.filter(r=>(tCt==='הכל'||r.c===tCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
   
-  updateSummaryDash('sumT', fl); // קריאה לעדכון הסיכום
+  updateSummaryDash('sumT', fl);
 
   document.getElementById('tCn').textContent=fl.length+' תוצאות';
   let h=fl.slice(0,tSh).map(r=>mkC(r,tT)).join('');
@@ -756,9 +745,9 @@ async function saveData(){
     D.ir.unshift(newRow);
     D.ir.sort((a,b)=>b.d.localeCompare(a.d));
     
-    triggerCelebration(); // <-- הפעלת הקונפטי והמדבקה!
+    triggerCelebration(); 
     
-  } else { // הוצאה
+  } else { 
     const vat=document.getElementById('nVat').value;
     const prod=document.getElementById('nExpProd').value;
     const cat=document.getElementById('nExpCat').value;

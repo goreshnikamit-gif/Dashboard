@@ -9,7 +9,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
 
-/* משתני צבעים - כאן הקסם של מצב יום/לילה */
+/* משתני צבעים */
 :root {
     --bg-body: #0f172a;
     --bg-card: #1e293b;
@@ -24,7 +24,6 @@
     --nav-bg: rgba(15,23,42,0.95);
 }
 
-/* הגדרות למצב יום (Light Mode) */
 [data-theme="light"] {
     --bg-body: #f1f5f9;
     --bg-card: #ffffff;
@@ -43,16 +42,23 @@
 body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system-ui,sans-serif;direction:rtl;min-height:100vh;overflow-x:hidden;padding-bottom:90px;transition:background 0.3s, color 0.3s}
 ::-webkit-scrollbar{display:none}
 
-/* מסך התחברות */
-#loginScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.l-box{background:var(--bg-card);padding:30px;border-radius:20px;width:100%;max-width:320px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border-color)}
-.l-ttl{font-size:24px;font-weight:800;margin-bottom:8px;color:var(--accent)}
-.l-sub{font-size:12px;color:var(--text-sub);margin-bottom:24px}
-.l-inp{width:100%;padding:14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:12px;color:var(--text-main);font-size:18px;text-align:center;margin-bottom:16px;outline:none;letter-spacing:4px}
-.l-inp:focus{border-color:var(--accent)}
-.l-btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer}
+/* מסך התחברות גוגל החדש */
+#googleLoginScreen {position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.l-box {background:var(--bg-card);padding:40px 30px;border-radius:24px;width:100%;max-width:340px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border-color)}
+.l-ttl {font-size:28px;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg, #14b8a6, #3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.l-sub {font-size:14px;color:var(--text-sub);margin-bottom:32px;line-height:1.4;}
+.g-btn-wrapper {display:flex;justify-content:center;width:100%;min-height:44px;}
 
-/* שאר העיצוב */
+/* דשבורד סיכום דינמי */
+.summary-dash {display: flex; justify-content: space-between; background: var(--bg-card); padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+.summary-dash > div {flex: 1;}
+.sd-ttl {font-size: 11px; color: var(--text-sub); margin-bottom: 4px; font-weight:500;}
+.sd-val {font-size: 16px; font-weight: 800; color: var(--text-main);}
+
+/* קוביית תובנות */
+.insight-item {font-size:13px; margin-bottom:8px; padding:10px 12px; background:var(--bg-input); border-radius:8px; border-right:4px solid var(--accent); line-height:1.4; color:var(--text-main);}
+.insight-item:last-child {margin-bottom:0;}
+
 .loader{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999}
 .loader.hide{display:none}
 .spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
@@ -152,16 +158,34 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 .pg{display:none}.pg.show{display:block}
 .upd{font-size:9px;color:var(--text-muted);text-align:center;padding:8px}
 </style>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 </head>
 <body>
 
-<div id="loginScreen">
+<div id="googleLoginScreen">
     <div class="l-box">
         <div class="l-ttl">Nes X Stilla</div>
-        <div class="l-sub">ניהול פיננסי מאובטח</div>
-        <input type="password" id="passInput" class="l-inp" placeholder="הכנס סיסמה" pattern="[0-9]*" inputmode="numeric">
-        <button class="l-btn" onclick="checkPass()">כניסה</button>
-        <div id="lErr" style="color:#f87171;font-size:12px;margin-top:10px;display:none">סיסמה שגויה</div>
+        <div class="l-sub">כניסה מאובטחת באמצעות טביעת אצבע או חשבון גוגל למורשים בלבד.</div>
+        <div class="g-btn-wrapper">
+            <div id="g_id_onload"
+                 data-client_id="943081015380-nhhrgi95qj8lhlt783ie62lvjfvau6cs.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="pill"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+        </div>
     </div>
 </div>
 
@@ -211,20 +235,24 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 <div id="pgI" class="pg">
 <div class="cd"><div class="ttt">תתי קטגוריות הכנסה</div><div id="subC"></div></div>
 <input class="si" id="iSr" placeholder="🔍 חיפוש הכנסות..." oninput="rInc()">
-<div class="fr" id="iCh"></div><div class="cn" id="iCn"></div><div id="iLs"></div>
+<div id="sumI" class="summary-dash"></div> <div class="fr" id="iCh"></div><div class="cn" id="iCn"></div><div id="iLs"></div>
 <button class="fab" onclick="oMod('income')">+</button>
 </div>
 
 <div id="pgE" class="pg">
 <input class="si" id="eSr" placeholder="🔍 חיפוש הוצאות..." oninput="rExp()">
-<div class="fr" id="eCh"></div><div class="cn" id="eCn"></div><div id="eLs"></div>
+<div id="sumE" class="summary-dash"></div> <div class="fr" id="eCh"></div><div class="cn" id="eCn"></div><div id="eLs"></div>
 <button class="fab exp" onclick="oMod('expense')">+</button>
 </div>
 
 <div id="pgT" class="pg">
+<div class="cd">
+    <div class="ttt">💡 תובנות חכמות (לתקופה הנבחרת)</div>
+    <div id="insightsBox"></div>
+</div>
 <div class="tabs"><button class="tab on" id="tI" onclick="setTT('i')">הכנסות</button><button class="tab" id="tE" onclick="setTT('e')">הוצאות</button></div>
 <input class="si" id="tSr" placeholder="🔍 חיפוש..." oninput="rTbl()">
-<div class="fr" id="tCh"></div><div class="cn" id="tCn"></div><div id="tLs"></div>
+<div id="sumT" class="summary-dash"></div> <div class="fr" id="tCh"></div><div class="cn" id="tCn"></div><div id="tLs"></div>
 </div>
 </div>
 
@@ -282,9 +310,6 @@ body{background:var(--bg-body);color:var(--text-main);font-family:'Rubik',system
 </div>
 
 <script>
-// *** הגדרת סיסמה ***
-const APP_PASS = "1234";
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9lE3GkDZaDqQNGi5u4v50HmdmPwiEtqIYu3jRcCP8wvvpJ4qMVNNx14s4AMnMRFLE/exec";
 const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vTvByTtAZQB0kidb7ydyioheuF4OWb-ap8QY57KKWHhAVkWgHEQQkA13KKvZLLPQfDZPwL5GX6lYCDK/pub?gid=101851869&single=true&output=csv";
 const IC=['#14b8a6','#f97316','#3b82f6','#a78bfa','#ec4899','#eab308'];
@@ -294,6 +319,37 @@ const CC={'מופע':'#14b8a6','מסחרי':'#f97316','תמלוגים':'#3b82f6'
 
 let D={ir:[],er:[]};
 let s1='',s2='',curPg='S',iCt='הכל',eCt='הכל',tT='i',tCt='הכל',eSh=50,tSh=50,curType='income';
+
+// --- התחברות גוגל (OAuth) ---
+function handleCredentialResponse(response) {
+    // גוגל אימתה את המשתמש בהצלחה
+    localStorage.setItem('auth_ok', 'true');
+    localStorage.setItem('auth_time', new Date().getTime());
+    showApp();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.getItem('theme') === 'light') {
+        document.getElementById('themeBtn').textContent = '🌙';
+    }
+    
+    // בדיקת התחברות מגוגל (נשמר ל-24 שעות)
+    const savedAuth = localStorage.getItem('auth_ok');
+    const authTime = localStorage.getItem('auth_time');
+    const now = new Date().getTime();
+    
+    if (savedAuth === 'true' && authTime && (now - parseInt(authTime) < 24 * 60 * 60 * 1000)) {
+        showApp();
+    } else {
+        document.getElementById('googleLoginScreen').style.display = 'flex';
+    }
+});
+
+function showApp() {
+    document.getElementById('googleLoginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    loadData();
+}
 
 // ניהול מצב יום/לילה
 function toggleTheme() {
@@ -309,47 +365,23 @@ function toggleTheme() {
     }
 }
 
-// בדיקת מצב שמור בטעינה
-(function(){
-    const savedTheme = localStorage.getItem('theme');
-    if(savedTheme === 'light'){
-        document.body.setAttribute('data-theme', 'light');
-        // נעדכן את האייקון רק כשהדף נטען
-    }
-})();
-
-document.addEventListener('DOMContentLoaded', () => {
-    // עדכון אייקון התמה
-    if(localStorage.getItem('theme') === 'light') {
-        document.getElementById('themeBtn').textContent = '🌙';
+// --- פונקציית חגיגה: קונפטי ומדבקה ---
+function triggerCelebration() {
+    if(typeof confetti !== 'undefined') {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
     
-    // בדיקת התחברות
-    const savedAuth = localStorage.getItem('auth_ok');
-    const authTime = localStorage.getItem('auth_time');
-    const now = new Date().getTime();
+    const sticker = document.createElement('img');
+    // שים לב: תחליף את הלינק הזה בלינק האמיתי לתמונה של החבר שלך!
+    sticker.src = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExanV0N2VkY2M2ZzNqb3A3bG5mZnFrZG5qc3JicDhyMXo0YWh2dDIzeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MFsqcBSoOKPbjtmvWz/giphy.gif'; 
+    sticker.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:99999;width:200px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);';
+    document.body.appendChild(sticker);
     
-    if (savedAuth === 'true' && authTime && (now - parseInt(authTime) < 24 * 60 * 60 * 1000)) {
-        showApp();
-    }
-});
-
-function checkPass() {
-    const val = document.getElementById('passInput').value;
-    if (val === APP_PASS) {
-        localStorage.setItem('auth_ok', 'true');
-        localStorage.setItem('auth_time', new Date().getTime());
-        showApp();
-    } else {
-        document.getElementById('lErr').style.display = 'block';
-        setTimeout(() => document.getElementById('lErr').style.display='none', 2000);
-    }
-}
-
-function showApp() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    loadData();
+    setTimeout(() => sticker.style.transform = 'translate(-50%, -50%) scale(1)', 50);
+    setTimeout(() => { 
+        sticker.style.transform = 'translate(-50%, -50%) scale(0)'; 
+        setTimeout(() => sticker.remove(), 500);
+    }, 3000);
 }
 
 function fmt(n){return '₪'+Math.round(n).toLocaleString('he-IL')}
@@ -470,9 +502,48 @@ function init(){
 function sP(el,a,b){document.querySelectorAll('.pb').forEach(x=>x.classList.remove('on'));el.classList.add('on');document.getElementById('sd').value=a;document.getElementById('ed').value=b;apply();}
 function apply(){s1=document.getElementById('sd').value;s2=document.getElementById('ed').value;document.getElementById('pLbl').textContent=new Date(s1).toLocaleDateString('he-IL')+' - '+new Date(s2).toLocaleDateString('he-IL');iCt='הכל';eCt='הכל';tCt='הכל';eSh=50;tSh=50;renderAll();}
 
+// --- עדכון שורת הסיכום בדינמיות ---
+function updateSummaryDash(elId, arr) {
+    const total = arr.reduce((sum, item) => sum + item.a, 0);
+    const count = arr.length;
+    const avg = count > 0 ? total / count : 0;
+    
+    document.getElementById(elId).innerHTML = `
+        <div><div class="sd-ttl">סה״כ</div><div class="sd-val ${elId==='sumI'?'gn':elId==='sumE'?'or':'tl'}">${fmt(total)}</div></div>
+        <div style="border-right:1px solid var(--border-color); border-left:1px solid var(--border-color);"><div class="sd-ttl">פעולות</div><div class="sd-val">${count}</div></div>
+        <div><div class="sd-ttl">ממוצע</div><div class="sd-val">${fmt(avg)}</div></div>
+    `;
+}
+
+// --- יצירת התובנות החכמות ---
+function generateInsights(inc, exp) {
+    const sumI = inc.reduce((s, r) => s + r.a, 0);
+    const sumE = exp.reduce((s, r) => s + r.a, 0);
+    let insights = [];
+    
+    if (sumI > sumE && sumE > 0) insights.push(`המצב מעולה! ההכנסות שלך גבוהות מההוצאות בתקופה זו ב-<b>${fmt(sumI - sumE)}</b>.`);
+    if (sumE > sumI) insights.push(`שים לב: בתקופה זו ההוצאות עלו על ההכנסות ב-<b>${fmt(sumE - sumI)}</b>.`);
+    
+    const cats = {}; exp.forEach(r => { cats[r.c] = (cats[r.c]||0) + r.a; });
+    const topCat = Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+    if (topCat) insights.push(`ההוצאה הגדולה ביותר שלך היא על קטגוריית <b>${topCat[0]}</b> (סך הכל ${fmt(topCat[1])}).`);
+    
+    if (inc.length > 0) {
+       const avgI = Math.round(sumI / inc.length);
+       insights.push(`הממוצע שלך להכנסה בודדת בתקופה זו עומד על <b>${fmt(avgI)}</b>.`);
+    }
+
+    const html = insights.map(txt => `<div class="insight-item">${txt}</div>`).join('');
+    document.getElementById('insightsBox').innerHTML = html || '<div style="font-size:12px;color:var(--text-muted);padding:10px;">אין מספיק נתונים להפקת תובנות לתקופה זו.</div>';
+}
+
 function renderAll(){
   const{inc,exp}=gF();
   const ti=inc.reduce((s,r)=>s+r.a,0),te=exp.reduce((s,r)=>s+r.a,0),pr=ti-te,mg=ti>0?((pr/ti)*100).toFixed(1):0;
+  
+  // עדכון התובנות
+  generateInsights(inc, exp);
+  
   document.getElementById('kpis').innerHTML=`
     <div class="kp"><div class="kl">סה״כ הכנסות</div><div class="kv tl">${fK(ti)}</div></div>
     <div class="kp"><div class="kl">סה״כ הוצאות</div><div class="kv or">${fK(te)}</div></div>
@@ -565,6 +636,9 @@ function rInc(){
   document.getElementById('subC').innerHTML=sh||'<div style="font-size:11px;color:var(--text-muted);text-align:center">אין</div>';
   const q=(document.getElementById('iSr').value||'').toLowerCase();
   const fl=inc.filter(r=>(iCt==='הכל'||r.c===iCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
+  
+  updateSummaryDash('sumI', fl); // קריאה לעדכון הסיכום
+  
   document.getElementById('iCn').textContent=fl.length+' מתוך '+inc.length;
   document.getElementById('iLs').innerHTML=fl.map(r=>mkC(r,'i')).join('');
 }
@@ -575,6 +649,9 @@ function rExp(){
   document.getElementById('eCh').innerHTML=cats.map(c=>`<button class="fp ${eCt===c?'on':''}" onclick="eCt='${c}';eSh=50;rExp()">${c}</button>`).join('');
   const q=(document.getElementById('eSr').value||'').toLowerCase();
   const fl=exp.filter(r=>(eCt==='הכל'||r.c===eCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
+  
+  updateSummaryDash('sumE', fl); // קריאה לעדכון הסיכום
+
   document.getElementById('eCn').textContent=fl.length+' מתוך '+exp.length;
   let h=fl.slice(0,eSh).map(r=>mkC(r,'e')).join('');
   if(fl.length>eSh)h+=`<button class="abtn" style="width:100%;margin-top:8px;padding:10px;font-size:12px" onclick="eSh+=50;rExp()">טען עוד (${Math.min(eSh+50,fl.length)} מתוך ${fl.length})</button>`;
@@ -589,6 +666,9 @@ function rTbl(){
   document.getElementById('tCh').innerHTML=cats.map(c=>`<button class="fp ${tCt===c?'on':''}" onclick="tCt='${c}';tSh=50;rTbl()">${c}</button>`).join('');
   const q=(document.getElementById('tSr').value||'').toLowerCase();
   const fl=recs.filter(r=>(tCt==='הכל'||r.c===tCt)&&(!q||r.s.toLowerCase().includes(q)||r.c.toLowerCase().includes(q)));
+  
+  updateSummaryDash('sumT', fl); // קריאה לעדכון הסיכום
+
   document.getElementById('tCn').textContent=fl.length+' תוצאות';
   let h=fl.slice(0,tSh).map(r=>mkC(r,tT)).join('');
   if(fl.length>tSh)h+=`<button class="abtn" style="width:100%;margin-top:8px;padding:10px;font-size:12px" onclick="tSh+=50;rTbl()">טען עוד (${Math.min(tSh+50,fl.length)} מתוך ${fl.length})</button>`;
@@ -653,6 +733,8 @@ async function saveData(){
     D.ir.unshift(newRow);
     D.ir.sort((a,b)=>b.d.localeCompare(a.d));
     
+    triggerCelebration(); // <-- הפעלת הקונפטי והמדבקה!
+    
   } else { // הוצאה
     const vat=document.getElementById('nVat').value;
     const prod=document.getElementById('nExpProd').value;
@@ -670,7 +752,6 @@ async function saveData(){
   }
 
   renderAll();
-  alert('נשמר!'); 
   cMod();
   
   document.getElementById('nAmt').value='';

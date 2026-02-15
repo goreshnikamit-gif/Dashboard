@@ -321,11 +321,34 @@ let D={ir:[],er:[]};
 let s1='',s2='',curPg='S',iCt='הכל',eCt='הכל',tT='i',tCt='הכל',eSh=50,tSh=50,curType='income';
 
 // --- התחברות גוגל (OAuth) ---
-function handleCredentialResponse(response) {
-    // גוגל אימתה את המשתמש בהצלחה
-    localStorage.setItem('auth_ok', 'true');
-    localStorage.setItem('auth_time', new Date().getTime());
-    showApp();
+async function handleCredentialResponse(response) {
+    // פענוח זהות המשתמש מגוגל
+    const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
+    const userEmail = responsePayload.email;
+
+    // הצגת הודעת המתנה
+    const loader = document.createElement('div');
+    loader.innerHTML = 'בודק הרשאות מול גוגל שיטס...';
+    loader.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);color:white;display:flex;align-items:center;justify-content:center;z-index:100000;';
+    document.body.appendChild(loader);
+
+    try {
+        // הניסיון לגשת לסקריפט. אם המשתמש לא מורשה בשיטס, הבקשה תיכשל
+        const authCheck = await fetch(SCRIPT_URL);
+        const result = await authCheck.text();
+        
+        if (result === "authorized") {
+            localStorage.setItem('auth_ok', 'true');
+            localStorage.setItem('user_email', userEmail);
+            location.reload(); 
+        } else {
+            throw new Error("unauthorized");
+        }
+    } catch (error) {
+        alert("גישה נדחתה! רק משתמשים המשותפים כעורכים בגיליון הגוגל שיטס מורשים להיכנס.");
+        loader.remove();
+        google.accounts.id.disableAutoSelect();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

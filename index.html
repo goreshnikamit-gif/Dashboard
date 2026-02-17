@@ -311,7 +311,6 @@ const CC={'מופע':'#14b8a6','מסחרי':'#f97316','תמלוגים':'#3b82f6'
 let D={ir:[],er:[]};
 let s1='',s2='',curPg='S',iCt='הכל',eCt='הכל',tT='i',tCt='הכל',eSh=50,tSh=50,curType='income';
 
-// --- התחברות גוגל (המנגנון שעוקף חסימות דפדפן ומשתמש רק ב-POST) ---
 async function handleCredentialResponse(response) {
     const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
     const userEmail = responsePayload.email;
@@ -322,14 +321,13 @@ async function handleCredentialResponse(response) {
     document.body.appendChild(loader);
 
     try {
-        // שולחים בקשת POST חלקה - הדפדפן לא יחסום אותה לעולם כי זו אותה שיטה של השמירה
         const checkReq = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({ action: "checkAuth", email: userEmail })
         });
         const result = await checkReq.text();
 
-if (result.trim() === "authorized") {
+        if (result.trim() === "authorized") {
             localStorage.setItem('auth_ok', 'true');
             localStorage.setItem('auth_time', new Date().getTime());
             localStorage.setItem('user_email', userEmail);
@@ -385,9 +383,6 @@ function triggerCelebration() {
     }
     
     const sticker = document.createElement('img');
-    // =========================================================
-    // הערה חשובה: פה למטה שים את הלינק לגיף שאהבת והורדת בעצמך!
-    // =========================================================
     sticker.src = 'https://media.giphy.com/media/l41YmQjOz9qg2Ecow/giphy.gif'; 
     sticker.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:99999;width:200px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);';
     document.body.appendChild(sticker);
@@ -774,9 +769,20 @@ async function saveData(){
   }
   
   try {
-    await fetch(SCRIPT_URL, {method: 'POST', body: JSON.stringify(data)});
+    const response = await fetch(SCRIPT_URL, {
+        method: 'POST', 
+        body: JSON.stringify(data)
+    });
+    const resultText = await response.text();
+    
+    if (resultText.includes("Success")) {
+        console.log("Saved successfully to Google Sheets");
+    } else {
+        alert("תקלה בשמירה מול השרת: " + resultText);
+    }
   } catch(e){ 
       console.error('Error saving to sheet', e);
+      alert("שגיאת תקשורת, נסה שוב מאוחר יותר.");
   } finally { 
       btn.disabled=false; btn.textContent='שמור'; 
   }
